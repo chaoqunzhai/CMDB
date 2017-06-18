@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block body %}
+    {% block nav-bar %}
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header" style="position: fixed">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                            aria-expanded="false" aria-controls="navbar">
+                    </button>
+                    <a class="navbar-brand " href="#">CMDB</a>
+                </div>
+                {#                <div id="navbar" class="navbar-collapse collapse">#}
+                <ul class="nav navbar-nav navbar-right">
+                    <li>&nbsp;</li>
+                    <li><a href="/category/all/">主菜单</a></li>
+                    <li><a href="#">Profile</a></li>
+                    {% if request.user.is_authenticated %}
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                               aria-haspopup="true" aria-expanded="false">{{ request.user }}<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'logout' %}">退出</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li class="dropdown-header">其他</li>
+                                <li><a href="#">待续</a></li>
+                            </ul>
+                        </li>
+                        </ul>
+                    {% else %}
+                        <li class="#"><a href="{% url 'login' %}">登录</a></li>
+                    {% endif %}
+                <form class="navbar-form navbar-right">
+                    <input type="text" class="form-control" placeholder="Search...">
+                </form>
+            </div>
+            {#            </div>#}
+        </nav>
+    {% endblock %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar" style="position: fixed">
+                <ul class="nav nav-sidebar">
+                    <li>
+                        <a href="{% url "salt_run" %}">Salt图示</a>
+                    </li>
+                </ul>
+                <ul class="nav nav-sidebar">
+                    <li>
+                        <a href="{% url "salt_api" %}">Salt_Api操作</a>
+                    </li>
+                    <li><a href="">Nav item again</a></li>
+                    <li><a href="">One more nav</a></li>
+                    <li><a href="">Another nav item</a></li>
+                    <li><a href="">More navigation</a></li>
+                </ul>
+            </div>
+            <div class="row">
+                <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                    {% block salt_map %}{% endblock %}
+                    {% block salt_api %}{% endblock %}
+                    {% block conent %} {% endblock %}
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+<script type="text/javascript" src="/static/js/jquery-1.12.4.js"></script>
+{% block js %}{% endblock %}

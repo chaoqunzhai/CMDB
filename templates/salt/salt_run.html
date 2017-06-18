@@ -1,0 +1,56 @@
+{% extends "assect_list.html"%}
+{% block salt_map %}
+        <h1 class="page-header">SaltStack配置管理</h1>
+        <div class="row placeholders">
+            <div class="col-xs-6 col-sm-6 placeholder">
+                <div id="main" style="width: 500px;height:300px;"></div>
+            </div>
+            <div class="col-xs-6 col-sm-6 placeholder">
+                <div id="main_2" style="width: 500px;height:300px;"></div>
+            </div>
+        </div>
+
+{% endblock %}
+{% block js %}
+<script>
+    var myChart = echarts.init(document.getElementById('main'));
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: '修改主机次数'
+        },
+        tooltip: {},
+        legend: {
+            data: ['{{ test }}']
+        },
+        xAxis: {
+            data: ["B2B", "B2C", "大数据", "开发测试", "运维开发"]
+        },
+        yAxis: {},
+        series: [{
+            name: '{{ test }}',
+            type: 'bar',
+            data: [5, 20, 36, 10, 10]
+        }]
+    };
+    myChart.setOption(option);
+    var myChart2 = echarts.init(document.getElementById('main_2'));
+    var option2 = {
+        series: [
+            {
+                name: '访问来源',
+                type: 'pie',
+                radius: '85%',
+                data: [
+                    {value: 2, name: '视频广告'},
+                    {value: 4, name: '联盟广告'},
+                    {value: 1, name: '邮件营销'},
+                    {value: 5, name: '直接访问'},
+                    {value: 3, name: '搜索引擎'}
+                ]
+            }
+        ]
+    };
+    myChart2.setOption(option2);
+</script>
+{% endblock %}

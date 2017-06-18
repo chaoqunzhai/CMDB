@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="http://v3.bootcss.com/favicon.ico">
+
+    <title>CMDB</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/dashboard.css" rel="stylesheet">
+    {% block header-recources %}{% endblock %}
+    <style>
+        {% block css %}{% endblock %}
+         .one{
+            position:fixed;
+            top:0;
+            left:0;
+            right:0;
+            bottom:0;
+            background-color: black;
+            opacity: 0.1;
+
+    }
+    </style>
+</head>
+
+<body>
+
+{% block body %} {% endblock %}
+{% block error %}{% endblock %}
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="/static/jquery-1.12.4.js"></script>
+<script src="/static/js/echarts.min.js"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="/static/js/bootstrap.min.js"></script>
+<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+<script src="/static/js/holder.min.js"></script>
+<script src="/static/table.js"></script>
+<script src="/static/delete.js"></script>
+<script src="/static/js/jquery.cookie.js"></script>
+<script src="/static/js/nb-list.js"></script>
+{% block js %}{% endblock %}
+<script>
+    $(function () {
+            table('/salt/salt_api_json');
+
+            console.log({{ test }})
+        });
+    $(function () {
+        delurl('/salt/salt_api');
+    });
+    $(".nav-sidebar a[href='{{ request.path }}']").parent().addClass("active");
+
+    function checkAll() {
+        $(':checkbox').prop('checked', true);
+        // var v =$(this).prop('checked')?false:true;
+        // $(this).prop('checked',v);
+    }
+
+    function reverAll() {
+        $(':checkbox').each(function (k) {
+            var v = $(this).prop('checked') ? false : true;
+            $(this).prop('checked', v);
+        });
+    }
+
+    function clearAll() {
+        $(':checkbox').each(function (k) {
+            $(this).prop('checked', false);
+        });
+
+    }
+</script>
+
+</body>
+</html>
