@@ -1,0 +1,84 @@
+{% extends "assect_list.html" %}
+{% block css %}
+    .info{
+    width: 400px;
+    height:300px;
+    position: fixed;
+    top:50px;
+    left:400px;
+    right:400px;
+    background-color: white;
+    }
+    .hide{
+    display: none;
+    }
+    .show{
+    display: block;
+    }
+{% endblock %}
+{% block salt_api %}
+
+    <h2 class="sub-header">管理列表</h2>
+
+    <div style="margin: 0 auto;">
+        <div class="btn-group" role="group" aria-label="...">
+            <a id="check_all" class="btn btn-success" onclick="checkAll();"><i
+                    class="fa fa-floppy-o"></i> 全选</a>
+            <a id="check_reverse" class="btn btn-info" onclick="reverAll();"><i
+                    class="fa fa-minus-square-o"></i> 反选</a>
+            <a id="check_cancel" class="btn btn-warning" onclick="clearAll();"><i
+                    class="fa fa-minus-square-o"></i> 取消</a>
+            <a id="check_add" class="btn btn-primary"><i class="fa fa-plus-circle"></i>添加</a>
+            <a id="do_delete" class="btn btn-danger "><i class="fa fa-trash"></i> 删除</a>
+            <a id="edit_mode_target" class="btn btn-default no-radius"><i class="fa fa-pencil-square-o"></i>
+                <span>进入编辑模式</span></a>
+            <a id="do_save" class="btn btn-default no-radius"><i class="fa fa-floppy-o"></i> 保存</a>
+            <a id="do_refresh" class="btn btn-default no-radius"><i class="fa fa-refresh"></i> 刷新</a>
+            <a id="handle_status" class="btn no-radius" tabindex="0" role="button" data-toggle="manual"
+               data-trigger="focus" data-container="body" data-html="true" data-placement="bottom" title="错误详细"
+               data-content="">{{ error_msg }}</a>
+        </div>
+        <div class="check_add_header">
+            <div class="hide check_add_hide table">
+                <form action="salt_api" method="post" class="form-inline">
+                    <div class="form-group">
+                        <label for="exampleInputName2">主机IP</label>
+                        <input id="hostip" name="ip" type="text" class="form-control" placeholder="192.168.*.*"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName2">主机系统</label>
+                        <input id="kernel" name="kernel" type="text" class="form-control" placeholder="Centos7"/>
+                        <select class="form-control" name="source_name">
+                            {% for source_key,source_value in source_type_dict.items %}
+                                <option value="{{ source_key }}">{{ source_value }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="submit" value="提交" class="btn btn-default"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id='black' class="one hide"></div>
+        <div id="modal_delete" class=" hide alert alert-danger alert-dismissible fade in modal-delete " role="alert">
+            <button type="button" class="close" aria-label="Close"><span>×</span>
+            </button>
+            <h4>确定删除资产？</h4>
+            <p>与该资产相关联的网卡、硬盘、内存和日志等将全部被删除！<br> &nbsp;</p>
+            <p style="text-align: right">
+                <button type="button" class="btn btn-danger" id="do_delete_confirm">确定删除</button>
+                <button type="button" class="btn btn-default" id="callback_delete">取消</button>
+            </p>
+        </div>
+        <table class=" table table-bordered table-hover">
+            <thead id="salt_tbHead">
+
+            </thead>
+
+            <tbody id="salt_tbBody">
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+
+
