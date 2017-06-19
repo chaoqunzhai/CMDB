@@ -7,6 +7,7 @@ function delurl(requestUrl) {
             if (v == true) {
                 // var v2 = $(':checkbox').parent().next().text();
                 var v1_1 = $(this).parent().next().text();
+                console.log('v1_1',v1_1);
                 $.ajax({
                    url: requestUrl,
                     type:'DELETE',

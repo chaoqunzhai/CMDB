@@ -10,15 +10,15 @@ obj=SourceBase.instance()
 
 class APIView(View):
     def get(self, request, *args, **kwargs):
-        # if request.POST.get('ip'):
         print('source0',SourceBase.sorce_type)
         return render(request, "salt/salt_api.html",{'source_type_dict':obj.sorce_type})
     def post(self,request,*args, **kwargs):
         print('test',request.POST.get('ip'),request.POST.get('source'))
+
         if request.POST.get('ip'):
             hostname_ip = models.Hostname.objects.filter(ip=request.POST.get('ip'))
             if hostname_ip:
-                error_msg='UNIQUE constraint failed: salt_hostname.ip'
+                error_msg='主机已经存在'
                 return render(request, 'salt/salt_api.html',
                               {'error_msg': error_msg, 'source_type_dict': obj.sorce_type})
             models.Hostname.objects.create(ip=request.POST.get('ip'),kernel=request.POST.get('kernel'),source=request.POST.get('source_name'))
@@ -27,7 +27,10 @@ class APIView(View):
             return render(request,'salt/salt_api.html',{'error_msg':error_msg,'source_type_dict':obj.sorce_type})
         return render(request, "salt/salt_api.html",{'source_type_dict':obj.sorce_type})
     def delete(self,request,*args,**kwargs):
-        uid = request.DELETE.get('v1_1')
+        uid = request.body
+        print('uid',uid.decode())
+        uid = uid.decode()
+        hostname = models.Hostname.objects.filter(id=uid).delete()
         return HttpResponse(uid)
 
 class APItDetailView(View):
