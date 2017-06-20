@@ -19,8 +19,7 @@ class Hsotlist(View):
             hostname_ip = models.Hostname.objects.filter(ip=request.POST.get('ip'))
             if hostname_ip:
                 error_msg='主机已经存在'
-                return render(request, 'hostlist.html',
-                              {'error_msg': error_msg, 'source_type_dict': obj.sorce_type})
+                return render(request, 'hostlist.html',{'error_msg': error_msg, 'source_type_dict': obj.sorce_type})
             models.Hostname.objects.create(ip=request.POST.get('ip'),kernel=request.POST.get('kernel'),source=request.POST.get('source_name'))
         else:
             error_msg='NOT index IP'
