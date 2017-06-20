@@ -2,16 +2,16 @@ from django.shortcuts import render,HttpResponse
 from django.contrib.auth.decorators import login_required
 from salt import models
 import json
-from django.views import View
+from django.views.generic import View
 from salt.plugins.source import SourceBase
 obj=SourceBase.instance()
 
 
 
-class APIView(View):
+class Hsotlist(View):
     def get(self, request, *args, **kwargs):
         print('source0',SourceBase.sorce_type)
-        return render(request, "salt/salt_api.html",{'source_type_dict':obj.sorce_type})
+        return render(request, "hostlist.html",{'source_type_dict':obj.sorce_type})
     def post(self,request,*args, **kwargs):
         print('test',request.POST.get('ip'),request.POST.get('source'))
 
@@ -19,13 +19,13 @@ class APIView(View):
             hostname_ip = models.Hostname.objects.filter(ip=request.POST.get('ip'))
             if hostname_ip:
                 error_msg='主机已经存在'
-                return render(request, 'salt/salt_api.html',
+                return render(request, 'hostlist.html',
                               {'error_msg': error_msg, 'source_type_dict': obj.sorce_type})
             models.Hostname.objects.create(ip=request.POST.get('ip'),kernel=request.POST.get('kernel'),source=request.POST.get('source_name'))
         else:
             error_msg='NOT index IP'
-            return render(request,'salt/salt_api.html',{'error_msg':error_msg,'source_type_dict':obj.sorce_type})
-        return render(request, "salt/salt_api.html",{'source_type_dict':obj.sorce_type})
+            return render(request,'hostlist.html',{'error_msg':error_msg,'source_type_dict':obj.sorce_type})
+        return render(request, "hostlist.html",{'source_type_dict':obj.sorce_type})
     def delete(self,request,*args,**kwargs):
         uid = request.body
         print('uid',uid.decode())
@@ -161,12 +161,12 @@ class SaltApiJSON(View):
         return HttpResponse(json.dumps(response))
 
 
-class SaltRun(View):
+class SaltMap(View):
     def get(self,request):
         hosts = models.Hostname.objects.all()
         print(hosts)
         test = '业务类型'
-        return render(request, "salt/salt_run.html",{'test':test})
+        return render(request, "salt/salt_map.html",{'test':test})
 
 
 
@@ -174,3 +174,17 @@ class SaltLogin(View):
     def get(self,request):
 
         return render(request, "salt/salt_login.html")
+
+class SaltApi(View):
+    def get(self,request,*args,**kwargs):
+        return  render(request,'salt/salt_api.html')
+
+    def post(self,request,*args,**kwargs):
+        Tag=0
+        salt_api_id=request.POST.getlist('salt_api_id')
+        salt_api_name = request.POST.getlist('salt_api_name')
+        salt_api_tage = request.POST.getlist('salt_api_tage')
+        if salt_api_id and salt_api_name and salt_api_tage:
+            Tag=1
+        print('salt_api',salt_api_id,salt_api_name,salt_api_tage)
+        return render(request, 'salt/salt_api.html',{'Tag':Tag})

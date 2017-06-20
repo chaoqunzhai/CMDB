@@ -18,7 +18,7 @@
         <div class="col-lg-3 col-sm-4 col-xs-6">
             <div class="info-box default-bg">
                 <i class="fa fa-desktop"></i>
-                <a class="count" href="/cmdb.html">资产</a>
+                <a class="count" href="{% url "hostlist" %}">资产</a>
 
                 <div class="title">CMDB</div>
             </div>
@@ -27,7 +27,7 @@
         <div class="col-lg-3 col-sm-4 col-xs-6">
             <div class="info-box blue-bg">
                 <i class="fa fa-cog"></i>
-                <a class="count" href="{% url "salt_run" %}">配管</a>
+                <a class="count" href="{% url "salt_map" %}">配管</a>
 
                 <div class="title">SALTSTACK</div>
             </div>

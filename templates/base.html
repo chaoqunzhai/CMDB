@@ -21,16 +21,32 @@
     {% block header-recources %}{% endblock %}
     <style>
         {% block css %}{% endblock %}
-         .one{
-            position:fixed;
-            top:0;
-            left:0;
-            right:0;
-            bottom:0;
+        .one {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background-color: black;
             opacity: 0.1;
 
-    }
+        }
+
+        #salt_api_header {
+            border: 1px solid red;
+            top: 50px;
+            left: 100px;
+            height: 100px;
+            width: 1300px;
+            position: relative;
+
+        }
+
+        #salt_api_header_core {
+            top: 25px;
+            left: 20px;
+            position: relative;
+        }
     </style>
 </head>
 
@@ -54,12 +70,12 @@
 {% block js %}{% endblock %}
 <script>
     $(function () {
-            table('/salt/salt_api_json');
+        table('/salt/salt_api_json');
 
-            console.log({{ test }})
-        });
+        console.log({{ test }})
+    });
     $(function () {
-        delurl('/salt/salt_api');
+        delurl('/salt/hostlist');
     });
     $(".nav-sidebar a[href='{{ request.path }}']").parent().addClass("active");
 
@@ -82,6 +98,27 @@
         });
 
     }
+    $(function () {
+        $('#submit_test').click(function () {
+            $.ajax({
+                url: '/salt/salt_api',
+                type: 'POST',
+                data: $('#salt_form').serialize(),
+                dataType: 'JSON',
+                traditional: true,
+                success: function (data) {
+                    if(data != 0){
+                        location.href='/salt/salt_api';
+                        console.log('salt_form', data)
+                    }else {
+                        console.log('no!!')
+                    }
+
+                }
+            })
+        });
+    });
+
 </script>
 
 </body>
