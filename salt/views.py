@@ -4,13 +4,15 @@ from salt import models
 import json
 from django.views.generic import View
 from salt.plugins.source import SourceBase
+from salt.plugins.pagelist import page
 obj=SourceBase.instance()
 
 
 
 class Hsotlist(View):
     def get(self, request, *args, **kwargs):
-        print('source0',SourceBase.sorce_type)
+        print('Hsotlist测试',request.GET.get('p',1))
+
         return render(request, "hostlist.html",{'source_type_dict':obj.sorce_type})
     def post(self,request,*args, **kwargs):
         print('test',request.POST.get('ip'),request.POST.get('source'))
@@ -116,7 +118,7 @@ class SaltApiJSON(View):
                     'q': None,
                     'title': '操作',
                     'display': True,
-                    'type': {'tpl': "<a href='/salt/salt_api_{db}'>查看详情</a> | <a href='/salt/salt_api_{db}'>编辑</a> ", 'kwargs': {'db': '@id'}},
+                    'type': {'tpl': "<a href='/salt/salt_api_{db}'>查看详情</a> | <a href='/salt/salt_api_{db}'>编辑</a>  ", 'kwargs': {'db': '@id'}},
                 },
 
             ]
@@ -154,6 +156,8 @@ class SaltApiJSON(View):
                         "Salt_run_status":models.Saltrun.status_choirce
                     }
                 }
+                test=page(table_data)
+                print('test111',test)
         except Exception as e:
                 response['status'] = False
                 response['message'] = str(e)

@@ -16,7 +16,7 @@
     display: block;
     }
 {% endblock %}
-{% block hostlist_head  %}
+{% block hostlist_head %}
     <ul class="nav nav-sidebar">
         <li>
             <a href="{% url "hostlist" %}">主机列表</a>
@@ -84,6 +84,19 @@
             <tbody id="salt_tbBody">
             </tbody>
         </table>
+        <span class="label label-default">Default</span>
+        <span class="label label-primary">Primary</span>
+        <span class="label label-success">Success</span>
+        <span class="label label-info">Info</span>
+        <span class="label label-warning">Warning</span>
+        <span class="label label-danger">Danger</span>
+        <nav>
+            <ul class="pagination">
+                <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+                <li class="active"><a href="#">1 </a></li>
+                <li><a href="#">2 </a></li>
+            </ul>
+        </nav>
     </div>
 {% endblock %}
 
