@@ -20,5 +20,4 @@ class SourceBase(object):
             return cls._i
     @property
     def sorce_type(self):
-
         return self.source_type_dict

@@ -91,11 +91,33 @@
         <span class="label label-warning">Warning</span>
         <span class="label label-danger">Danger</span>
         <nav>
-            <ul class="pagination">
-                <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-                <li class="active"><a href="#">1 </a></li>
-                <li><a href="#">2 </a></li>
-            </ul>
+        <div class="pagination">
+            <span class="step-links">
+                {% if articles.has_previous %}
+                    <a href="?page={{ articles.previous_page_number }}">previous</a>
+                {% endif %}
+                <span class="current">
+                    Page {{ articles.number }} of {{ articles.paginator.num_pages }}.
+                </span>
+
+                {% if articles.has_next %}
+                    <a href="?page={{ articles.next_page_number }}">next</a>
+                {% endif %}
+            </span>
+        </div>
+        <nav aria-label="上一页">
+          <ul class="pagination">
+            <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+              {% for page in articles.paginator.page_range %}
+                  {% if articles.number == page %} {# 如果是当前页#}
+                    <li class="active"><a href="hostlist?page={{ page }}">{{ page }}<span class="sr-only"></span></a></li>
+                  {% else %}
+                    <li class=""><a href="hostlist?page={{ page }}">{{ page }}<span class="sr-only"></span></a></li>
+                  {% endif%}
+                {% endfor %}
+
+          </ul>
+        </nav>
         </nav>
     </div>
 {% endblock %}

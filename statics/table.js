@@ -83,7 +83,7 @@ function table(requestUrl) {
                             else if (v1.q == 'saltrun__statues') {
                                 var db_value = getDisplayByidStatus(row.saltrun__statues, temp);
                                 kv[k2] = db_value;
-                                console.log('status', row['saltrun__statues']);
+                                // console.log('status', row['saltrun__statues']);
                                 if (row['saltrun__statues'] === null) {
                                     var db_value = '第一次配置';
                                     kv[k2] = db_value;

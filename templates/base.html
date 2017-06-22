@@ -70,7 +70,8 @@
 {% block js %}{% endblock %}
 <script>
     $(function () {
-        table('/salt/salt_api_json');
+
+        table('/salt/salt_api_json?page={{ articles.next_page_number }}');
 
         console.log({{ test }})
     });
