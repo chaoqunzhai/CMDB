@@ -82,11 +82,29 @@ function table(requestUrl) {
                             }
                             else if (v1.q == 'saltrun__statues') {
                                 var db_value = getDisplayByidStatus(row.saltrun__statues, temp);
-                                kv[k2] = db_value;
-                                // console.log('status', row['saltrun__statues']);
+                                // console.log('db_value',db_value);
+                                // $.each(JSON.parse(db_value),function (v1) {
+                                //     console.log('v1', v1);
+                                // });
+                                if(db_value == '失败'){
+                                    console.log('失败',db_value);
+                                    var db_value_css =  "<span class='label label-danger'>" + db_value + '</span>';
+                                }else if(db_value == '成功'){
+                                    var db_value_css =  "<span class='label label-success'>" + db_value + '</span>';
+                                }else if(db_value == '定时任务'){
+                                    var db_value_css =  "<span class='label label-info'>" + db_value + '</span>';
+                                }else if(db_value == '进行中'){
+                                    var db_value_css =  "<span class='label label-primary'>" + db_value + '</span>';
+                                }
+
+
+                                kv[k2] = db_value_css;  //db_value=成功
+
+                                // console.log('status',row['saltrun__statues']);
                                 if (row['saltrun__statues'] === null) {
                                     var db_value = '第一次配置';
-                                    kv[k2] = db_value;
+                                    var db_value_css =  "<span class='label label-default'>" + db_value + '</span>';
+                                    kv[k2] = db_value_css;
                                 }
                             }
                         }
@@ -111,13 +129,27 @@ function table(requestUrl) {
                         }
                     });
                     var text = v1.type.tpl.format(kv);
+
+
+
                     var td = document.createElement('td');
+
+                    // db_value_css.innerHTML="<span class='label label-success'>11</span>";
                     td.innerHTML = text;
                     $(tr).append(td);
+
                 }
 
             });
             $('#salt_tbBody').append(tr);
+
+
+
+
+            // db_value_css.innerHTML="<span class='label label-success'>11</span>";
+            //
+            // console.log('db___',db_value_css);
+
         })
     }
 

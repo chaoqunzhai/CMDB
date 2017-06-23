@@ -69,9 +69,10 @@
 <script src="/static/js/nb-list.js"></script>
 {% block js %}{% endblock %}
 <script>
+
     $(function () {
 
-        table('/salt/salt_api_json?page={{ articles.next_page_number }}');
+        table('/salt/salt_api_json?page={{  articles.number}} ');
 
         console.log({{ test }})
     });
@@ -98,6 +99,13 @@
             $(this).prop('checked', false);
         });
 
+    }
+    function post_host() {
+        $.ajax({
+            url:'/salt/hostlist?page=1',
+            type:'GET'
+        }
+        )
     }
     $(function () {
         $('#submit_test').click(function () {

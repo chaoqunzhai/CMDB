@@ -94,8 +94,6 @@ class Asset(BaseServiceList):
             for item in self.table_config:
                 if not item['q']:
                     continue
-                # elif item['q'] == 'role_type__salt_run__statues':
-                #     table_data_salt_run = models.Hostname.objects.filter(**{}).values('role_type__salt_run__statues')
                 query_list.append(item['q'])
             # 拿到字典
             # 查数据返回的是queryset，json只能去转换python的数据类型  所以外部加个list对queryset进行转换,拿内部就包裹一个字典
@@ -122,6 +120,7 @@ class Asset(BaseServiceList):
             response['message'] = str(e)
 
         super(Asset,self).__init__(condition_config=condition_config,table_config=self.table_config)
+
     @property
     def response(self):
         paginator = Paginator(self.table_data, 10)  # 分页功能  5的意思是一页分5条

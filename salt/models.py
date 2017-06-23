@@ -18,10 +18,10 @@ class Userprofile(models.Model):
 
 
 class Hostname(models.Model):
-    ip = models.GenericIPAddressField(unique=True)
+    ip = models.GenericIPAddressField(max_length=15,unique=True)
     disk = models.CharField(max_length=8,null=True,blank=True)
     cpu = models.CharField(max_length=8,null=True,blank=True)
-    kernel = models.CharField(max_length=8,null=True,blank=True)
+    kernel = models.CharField(max_length=24,null=True,blank=True)
     species_type = models.ForeignKey('Species',verbose_name='业务线经理',null=True,blank=True)
     role_type = models.ManyToManyField('Userprofile',blank=True,null=True,default=1)
     source_choirce = (
@@ -69,7 +69,7 @@ class Saltrun(models.Model):
     histroy = models.CharField(max_length=16,null=True,blank=True)
     def __unicode__(self):
 
-        return '%s' %self.fun_agrs
+        return '%s' %self.fun_args
 
     class Meta:
         verbose_name_plural = '操作命令'

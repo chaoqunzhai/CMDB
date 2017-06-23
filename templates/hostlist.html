@@ -1,4 +1,5 @@
 {% extends "assect_list.html" %}
+
 {% block css %}
     .info{
     width: 400px;
@@ -25,8 +26,14 @@
 {% endblock %}
 {% block hostlist_detail %}{% endblock %}
 {% block hostlist %}
-
+                <span class="label label-default">Default</span>
+        <span class="label label-primary">Primary</span>
+        <span class="label label-success">成功</span>
+        <span class="label label-info">Info</span>
+        <span class="label label-warning">Warning</span>
+        <span class="label label-danger">Danger</span>
     <h2 class="sub-header">管理列表</h2>
+
     <div style="margin: 0 auto;">
         <div class="btn-group" role="group" aria-label="...">
             <a id="check_all" class="btn btn-success" onclick="checkAll();"><i
@@ -41,27 +48,27 @@
                 <span>进入编辑模式</span></a>
             <a id="do_save" class="btn btn-default no-radius"><i class="fa fa-floppy-o"></i> 保存</a>
             <a id="do_refresh" class="btn btn-default no-radius"><i class="fa fa-refresh"></i> 刷新</a>
-            <a id="handle_status" class="btn no-radius" tabindex="0" role="button" data-toggle="manual"
-               data-trigger="focus" data-container="body" data-html="true" data-placement="bottom" title="错误详细"
-               data-content="">{{ error_msg }}</a>
+            {% if error_msg %}
+                <button type="button" class="btn btn-danger">{{ error_msg }}</button>
+            {% endif %}
         </div>
         <div class="check_add_header">
             <div class="hide check_add_hide table">
-                <form action="hostlist" method="post" class="form-inline">
+                <form action="hostlist?page=1" method="post" class="form-inline">
+                    {% for host in hostname_form %}
                     <div class="form-group">
-                        <label for="exampleInputName2">主机IP</label>
-                        <input id="hostip" name="ip" type="text" class="form-control" placeholder="192.168.*.*"/>
+                        <label for="exampleInputName2">{{ host.label }}</label>
+                        {{ host }}
                     </div>
+                    {% endfor %}
                     <div class="form-group">
-                        <label for="exampleInputName2">主机系统</label>
-                        <input id="kernel" name="kernel" type="text" class="form-control" placeholder="Centos7"/>
                         <select class="form-control" name="source_name">
                             {% for source_key,source_value in source_type_dict.items %}
                                 <option value="{{ source_key }}">{{ source_value }}</option>
                             {% endfor %}
                         </select>
-                        <input type="submit" value="提交" class="btn btn-default"/>
                     </div>
+                        <input type="submit" value="提交" class="btn btn-default" onclick="post_host"/>
                 </form>
             </div>
         </div>
@@ -84,38 +91,23 @@
             <tbody id="salt_tbBody">
             </tbody>
         </table>
-        <span class="label label-default">Default</span>
-        <span class="label label-primary">Primary</span>
-        <span class="label label-success">Success</span>
-        <span class="label label-info">Info</span>
-        <span class="label label-warning">Warning</span>
-        <span class="label label-danger">Danger</span>
-        <nav>
-        <div class="pagination">
-            <span class="step-links">
-                {% if articles.has_previous %}
-                    <a href="?page={{ articles.previous_page_number }}">previous</a>
-                {% endif %}
-                <span class="current">
-                    Page {{ articles.number }} of {{ articles.paginator.num_pages }}.
-                </span>
 
-                {% if articles.has_next %}
-                    <a href="?page={{ articles.next_page_number }}">next</a>
-                {% endif %}
-            </span>
-        </div>
+        <nav>
         <nav aria-label="上一页">
           <ul class="pagination">
-            <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+            {% if articles.has_previous %}
+            <li class=" "><a href="?page={{ articles.previous_page_number }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+            {% endif %}
+{#              <span>{{ articles.paginator.page_range }}</span>#}
+{#          <span>{{ articles.next_page_number  }} | {{ articles.number }}</span>#}
               {% for page in articles.paginator.page_range %}
                   {% if articles.number == page %} {# 如果是当前页#}
-                    <li class="active"><a href="hostlist?page={{ page }}">{{ page }}<span class="sr-only"></span></a></li>
+                    <li class="active"><a href="?page={{ page }}">{{ page   }}<span class="sr-only"></span></a></li>
                   {% else %}
-                    <li class=""><a href="hostlist?page={{ page }}">{{ page }}<span class="sr-only"></span></a></li>
+                    <li class=""><a href="?page={{ page }}">{{  page    }}<span class="sr-only"></span></a></li>
                   {% endif%}
                 {% endfor %}
-
+            <li class=""><a href="?page={{ articles.next_page_number }}" ><span aria-hidden="true">&raquo;</span></a></li>
           </ul>
         </nav>
         </nav>

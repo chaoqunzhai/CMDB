@@ -1,35 +1,48 @@
 from django.shortcuts import render,HttpResponse
 from django.contrib.auth.decorators import login_required
 from salt import models
-import json
+
 from django.views.generic import View
 from salt.plugins.source import SourceBase
 from salt.plugins.Asset import Asset
+from salt.forms import Hostname
+
+import json
 obj=SourceBase.instance()
 
 
 
 class Hsotlist(View):
     def get(self, request, *args, **kwargs):
+
         objdata = Asset(request.GET.get('page',1))
-        print('Hsotlist测试',request.GET.get('page',1))
+        hostname_form=Hostname()
         _ ,contacts =objdata.response
-        print('contactall',contacts,str(contacts).split(' ')[-1])
+        # print('contactall',contacts,str(contacts).split(' ')[-1])
 
-        return render(request, "hostlist.html",{'source_type_dict':obj.sorce_type,'articles':contacts})
+        return render(request, "hostlist.html",{'source_type_dict':obj.sorce_type,'articles':contacts,'hostname_form':hostname_form})
     def post(self,request,*args, **kwargs):
+        error_msg=''
         print('test',request.POST.get('ip'),request.POST.get('source'))
-
+        hostname_form = Hostname(request.POST)
         if request.POST.get('ip'):
-            hostname_ip = models.Hostname.objects.filter(ip=request.POST.get('ip'))
-            if hostname_ip:
-                error_msg='主机已经存在'
-                return render(request, 'hostlist.html',{'error_msg': error_msg, 'source_type_dict': obj.sorce_type})
-            models.Hostname.objects.create(ip=request.POST.get('ip'),kernel=request.POST.get('kernel'),source=request.POST.get('source_name'))
+
+
+            hostname_dict = {'ip':request.POST.get('ip'),'kernel':request.POST.get('kernel'),'source':request.POST.get('source_name')}
+            if hostname_form.is_valid():
+
+                hostname_ip = models.Hostname.objects.filter(ip=request.POST.get('ip'))
+                if hostname_ip:
+                    error_msg = '主机已经存在'
+                else:
+                    models.Hostname.objects.create(**hostname_dict)
+                return render(request, 'hostlist.html', {'error_msg': error_msg, 'source_type_dict': obj.sorce_type,'hostname_form':hostname_form})
+            else:
+                print('error',hostname_form.errors)
         else:
             error_msg='NOT index IP'
-            return render(request,'hostlist.html',{'error_msg':error_msg,'source_type_dict':obj.sorce_type})
-        return render(request, "hostlist.html",{'source_type_dict':obj.sorce_type})
+            return render(request,'hostlist.html',{'error_msg':error_msg,'source_type_dict':obj.sorce_type,'hostname_form':hostname_form})
+        return render(request, "hostlist.html",{'source_type_dict':obj.sorce_type,'hostname_form':hostname_form})
     def delete(self,request,*args,**kwargs):
         uid = request.body
         print('uid',uid.decode())
