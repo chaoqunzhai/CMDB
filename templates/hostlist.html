@@ -54,7 +54,7 @@
         </div>
         <div class="check_add_header">
             <div class="hide check_add_hide table">
-                <form action="hostlist?page=1" method="post" class="form-inline">{% csrf_token %}
+                <form action="hostlist" method="post" class="form-inline">{% csrf_token %}
                     {% for host in hostname_form %}
                         <div class="form-group">
                             <label for="exampleInputName2">{{ host.label }}</label>

@@ -145,15 +145,27 @@ class Asset(BaseServiceList):
             self.contacts = paginator.page(paginator.num_pages)
 
         # print('contacts',self.contacts,paginator.page(page).object_list)
-        self.response_base = {
-            'table_config': self.table_config,
-            'table_data': paginator.page(page).object_list,
-            'gloab_config': {
-                "Source_choirce": models.Hostname.source_choirce,
-                "Salt_run_status": models.Saltrun.status_choirce
+        try:
+            self.response_base = {
+                'table_config': self.table_config,
+                'table_data': paginator.page(page).object_list,
+                'gloab_config': {
+                    "Source_choirce": models.Hostname.source_choirce,
+                    "Salt_run_status": models.Saltrun.status_choirce
+                }
             }
-        }
-        print('Asset.py       [总共%s,每页显示%s,当前页是%s,筛选器是%s]'%(paginator.count, self.page_number,page,self.contacts))
+            print('Asset.py       [总共%s,每页显示%s,当前页是%s,筛选器是%s]'%(paginator.count, self.page_number,page,self.contacts))
+        except Exception as e:
+            self.response_base = {
+                'table_config': self.table_config,
+                'table_data': paginator.page(1).object_list,
+                'gloab_config': {
+                    "Source_choirce": models.Hostname.source_choirce,
+                    "Salt_run_status": models.Saltrun.status_choirce
+                }
+            }
+
+
         return self.response_base,self.contacts,
 
     # @property
