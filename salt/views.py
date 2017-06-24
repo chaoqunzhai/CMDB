@@ -6,9 +6,10 @@ from django.views.generic import View
 from salt.plugins.source import SourceBase
 from salt.plugins.Asset import Asset
 from salt.forms import Hostname
-
+from salt.plugins.getcookis import get_cookies
 import json
 obj=SourceBase.instance()
+
 
 
 
@@ -18,8 +19,9 @@ class Hsotlist(View):
         objdata = Asset(request.GET.get('page',1))
         hostname_form=Hostname()
         _ ,contacts =objdata.response
-        # print('contactall',contacts,str(contacts).split(' ')[-1])
-
+        val = get_cookies(request)
+        pgae_obj = Asset(pgae_number=val)
+        print('val',pgae_obj.page_number)
         return render(request, "hostlist.html",{'source_type_dict':obj.sorce_type,'articles':contacts,'hostname_form':hostname_form})
     def post(self,request,*args, **kwargs):
         error_msg=''
@@ -58,11 +60,13 @@ class APItDetailView(View):
 class SaltApiJSON(View):
 
     def get(self,request):
-        objconfig = Asset(request.GET.get('page'))
+        val = get_cookies(request)
+        objconfig = Asset(request.GET.get('page'),val)
         hostlist,_=objconfig.response
         return HttpResponse(json.dumps(hostlist))
 
 class SaltMap(View):
+
     def get(self,request):
         hosts = models.Hostname.objects.all()
         print(hosts)

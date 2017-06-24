@@ -47,6 +47,11 @@
             left: 20px;
             position: relative;
         }
+        #page_select{
+            top: 120px;
+            right: 0;
+            position: fixed;
+        }
     </style>
 </head>
 
@@ -74,7 +79,7 @@
 
         table('/salt/salt_api_json?page={{  articles.number}} ');
 
-        console.log({{ test }})
+        console.log({{  articles.number}})
     });
     $(function () {
         delurl('/salt/hostlist');
@@ -128,6 +133,18 @@
         });
     });
 
+    $('#page_select_insert li').each(function (index) {
+        var txt = $(this).text();
+{#        console.log('111',this,index);#}
+        $(this).on('click',function () {
+            $.cookie('per_page_count',txt);
+
+            location.reload();
+            console.log('22',txt)
+
+        });
+
+    })
 </script>
 
 </body>

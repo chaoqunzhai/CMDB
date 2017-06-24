@@ -1,5 +1,5 @@
 {% extends "assect_list.html" %}
-
+{% load paging %}
 {% block css %}
     .info{
     width: 400px;
@@ -26,12 +26,12 @@
 {% endblock %}
 {% block hostlist_detail %}{% endblock %}
 {% block hostlist %}
-                <span class="label label-default">Default</span>
-        <span class="label label-primary">Primary</span>
-        <span class="label label-success">成功</span>
-        <span class="label label-info">Info</span>
-        <span class="label label-warning">Warning</span>
-        <span class="label label-danger">Danger</span>
+    <span class="label label-default">Default</span>
+    <span class="label label-primary">Primary</span>
+    <span class="label label-success">成功</span>
+    <span class="label label-info">Info</span>
+    <span class="label label-warning">Warning</span>
+    <span class="label label-danger">Danger</span>
     <h2 class="sub-header">管理列表</h2>
 
     <div style="margin: 0 auto;">
@@ -54,12 +54,12 @@
         </div>
         <div class="check_add_header">
             <div class="hide check_add_hide table">
-                <form action="hostlist?page=1" method="post" class="form-inline">
+                <form action="hostlist?page=1" method="post" class="form-inline">{% csrf_token %}
                     {% for host in hostname_form %}
-                    <div class="form-group">
-                        <label for="exampleInputName2">{{ host.label }}</label>
-                        {{ host }}
-                    </div>
+                        <div class="form-group">
+                            <label for="exampleInputName2">{{ host.label }}</label>
+                            {{ host }}
+                        </div>
                     {% endfor %}
                     <div class="form-group">
                         <select class="form-control" name="source_name">
@@ -68,7 +68,7 @@
                             {% endfor %}
                         </select>
                     </div>
-                        <input type="submit" value="提交" class="btn btn-default" onclick="post_host"/>
+                    <input type="submit" value="提交" class="btn btn-default" onclick="post_host"/>
                 </form>
             </div>
         </div>
@@ -91,25 +91,48 @@
             <tbody id="salt_tbBody">
             </tbody>
         </table>
-
+        <div id="page_select">
+            <div class="btn-group">
+                <button type="button" class="btn btn-danger">分页数</button>
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" id="page_select_insert" onchange="changePageSize(this)" >
+                    <li value="5"><a href=" ">5</a></li>
+                    <li value="10"><a href=" " >10</a></li>
+                    <li value="20"><a href=" ">20</a></li>
+                    <li value="30"><a href=" ">30</a></li>
+                </ul>
+            </div>
+        </div>
         <nav>
-        <nav aria-label="上一页">
-          <ul class="pagination">
-            {% if articles.has_previous %}
-            <li class=" "><a href="?page={{ articles.previous_page_number }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-            {% endif %}
-{#              <span>{{ articles.paginator.page_range }}</span>#}
-{#          <span>{{ articles.next_page_number  }} | {{ articles.number }}</span>#}
-              {% for page in articles.paginator.page_range %}
-                  {% if articles.number == page %} {# 如果是当前页#}
-                    <li class="active"><a href="?page={{ page }}">{{ page   }}<span class="sr-only"></span></a></li>
-                  {% else %}
-                    <li class=""><a href="?page={{ page }}">{{  page    }}<span class="sr-only"></span></a></li>
-                  {% endif%}
-                {% endfor %}
-            <li class=""><a href="?page={{ articles.next_page_number }}" ><span aria-hidden="true">&raquo;</span></a></li>
-          </ul>
-        </nav>
+            <nav>
+                <ul class="pagination">
+                    {% if articles.has_previous %}
+                        <li class=" "><a href="?page={{ articles.previous_page_number }}" aria-label="Previous"><span
+                                aria-hidden="true">&laquo;</span></a></li>
+                    {% else %}
+                        <li class="disabled "><a href="?" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+                        </li>
+                    {% endif %}
+                    {% for page in articles.paginator.page_range %}
+                        {% if articles.number == page %} {# 如果是当前页#}
+                            <li class="active"><a href="?page={{ page }}">{{ page }}<span class="sr-only"></span></a>
+                            </li>
+                        {% else %}
+                            {#                      {% redner_paginator_btn articles page%}#}
+                            <li class=""><a href="?page={{ page }}">{{ page }}<span class="sr-only"></span></a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if articles.next_page_number > 1 %}
+                        <li class=""><a href="?page={{ articles.next_page_number }}"><span
+                                aria-hidden="true">&raquo;</span></a></li>
+                    {% else %}
+                        <li class="disabled"><a href="?"><span aria-hidden="true">&raquo;</span></a></li>
+                    {% endif %}
+                </ul>
+            </nav>
         </nav>
     </div>
 {% endblock %}

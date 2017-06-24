@@ -4,9 +4,7 @@ from django.contrib.auth.decorators import login_required
 
 
 
-# @login_required
-# def index(request):
-#     return redirect("/category/all/")
+
 
 def error(request):
     return render(request,'error.html')

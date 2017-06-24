@@ -1,11 +1,12 @@
 from salt import models
 from salt.plugins.base import BaseServiceList
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from salt.plugins.getcookis import get_cookies
 import json
 
 
 class Asset(BaseServiceList):
-    def __init__(self,page):
+    def __init__(self,page=1,pgae_number=10):
         #返回列名
         #返回数据
         #数据库中的数据
@@ -14,6 +15,7 @@ class Asset(BaseServiceList):
         2个@@表示从全局数据取
         '''
         self.page = page
+        self.page_number = pgae_number
         condition_config={}
         response = {'status': True, 'data': None, 'message': ''}
         try:
@@ -123,10 +125,11 @@ class Asset(BaseServiceList):
 
     @property
     def response(self):
-        paginator = Paginator(self.table_data, 10)  # 分页功能  5的意思是一页分5条
-        print('count', paginator.count)
+
+        paginator = Paginator(self.table_data, self.page_number)  # 分页功能  5的意思是一页分5条
+        print('总共条数', paginator.count,self.page_number)
         page = self.page  # 前端发送一个page  去url里面取page的值
-        print('self.page',page)
+        print('当前页面',page)
         try:
             self.contacts = paginator.page(page)  # 如果不是整理
         except PageNotAnInteger:
