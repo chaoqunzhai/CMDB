@@ -116,7 +116,7 @@ class Asset(BaseServiceList):
             # table_data 是从数据库中取到数据
             # 下面是第一种方法
 
-            print('test111',)
+
 
         except Exception as e:
             response['status'] = False
@@ -129,13 +129,13 @@ class Asset(BaseServiceList):
         page = self.request.GET.get('page')
         paginator = Paginator(self.table_data, self.cookies_number)  # 分页功能  5的意思是一页分5条
         if page:
-            print('yes111')
+           pass
         else:
             page = 1
-            print('else',page)
+            print('Asset.py         [如果cookies中没值,就默认第一页]')
             # page = self.request.GET.get('page')  # 前端发送一个page  去url里面取page的值
         #
-        print('Aset', self.cookies_number,page)
+        print('Aset.py[前端筛选到每页%s数据,分%s页]'%(self.cookies_number,page))
         try:
             self.contacts = paginator.page(page)  # 如果不是整理
         except PageNotAnInteger:
@@ -153,7 +153,7 @@ class Asset(BaseServiceList):
                 "Salt_run_status": models.Saltrun.status_choirce
             }
         }
-        print('总共%s,每页显示%s,当前页是%s,筛选器是%s'%(paginator.count, self.page_number,page,self.contacts))
+        print('Asset.py       [总共%s,每页显示%s,当前页是%s,筛选器是%s]'%(paginator.count, self.page_number,page,self.contacts))
         return self.response_base,self.contacts,
 
     # @property
