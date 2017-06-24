@@ -12,16 +12,31 @@ obj=SourceBase.instance()
 
 
 
+class SaltApiJSON(View):
+    """
+    :sal_api_json 是数据源
+    """
+    def get(self,request):
+        val = get_cookies(request)
+        # objconfig = Asset(request.GET.get('page'),val)
+        objconfig= Asset(request,val)
+        hostlist,contacts=objconfig.response
+        print('viewSalt中,每页分%s,Page函数中的值%s,筛选器是%s' % (val, objconfig.page_number, contacts))
+        return HttpResponse(json.dumps(hostlist))
 
 class Hsotlist(View):
     def get(self, request, *args, **kwargs):
 
-        objdata = Asset(request.GET.get('page',1))
-        hostname_form=Hostname()
-        _ ,contacts =objdata.response
         val = get_cookies(request)
-        pgae_obj = Asset(pgae_number=val)
-        print('val',pgae_obj.page_number)
+        objdata = Asset(request,val)
+        hostname_form=Hostname()
+
+        print('hostlist',val,type(val))
+
+        _, contacts = objdata.response
+        print('viewhost中,每页分%s,Page函数中的值%s,筛选器是%s'%(val,objdata.page_number,contacts))
+
+
         return render(request, "hostlist.html",{'source_type_dict':obj.sorce_type,'articles':contacts,'hostname_form':hostname_form})
     def post(self,request,*args, **kwargs):
         error_msg=''
@@ -57,13 +72,7 @@ class APItDetailView(View):
         print('APItDetailView',nid)
         return render(request,'salt/asset_detail.html',{'nid':nid})
 
-class SaltApiJSON(View):
 
-    def get(self,request):
-        val = get_cookies(request)
-        objconfig = Asset(request.GET.get('page'),val)
-        hostlist,_=objconfig.response
-        return HttpResponse(json.dumps(hostlist))
 
 class SaltMap(View):
 

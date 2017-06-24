@@ -78,6 +78,7 @@
     $(function () {
 
         table('/salt/salt_api_json?page={{  articles.number}} ');
+        //table这块传入的url,是数据来源,
 
         console.log({{  articles.number}})
     });
@@ -140,7 +141,7 @@
             $.cookie('per_page_count',txt);
 
             location.reload();
-            console.log('22',txt)
+            console.log('cookies',txt)
 
         });
 

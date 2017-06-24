@@ -6,7 +6,7 @@ import json
 
 
 class Asset(BaseServiceList):
-    def __init__(self,page=1,pgae_number=10):
+    def __init__(self,request,cookies_number,pgae_number=10):
         #返回列名
         #返回数据
         #数据库中的数据
@@ -14,8 +14,9 @@ class Asset(BaseServiceList):
         一个@表示从数据库返回数据取
         2个@@表示从全局数据取
         '''
-        self.page = page
+        self.request  = request
         self.page_number = pgae_number
+        self.cookies_number = cookies_number
         condition_config={}
         response = {'status': True, 'data': None, 'message': ''}
         try:
@@ -125,11 +126,16 @@ class Asset(BaseServiceList):
 
     @property
     def response(self):
-
-        paginator = Paginator(self.table_data, self.page_number)  # 分页功能  5的意思是一页分5条
-        print('总共条数', paginator.count,self.page_number)
-        page = self.page  # 前端发送一个page  去url里面取page的值
-        print('当前页面',page)
+        page = self.request.GET.get('page')
+        paginator = Paginator(self.table_data, self.cookies_number)  # 分页功能  5的意思是一页分5条
+        if page:
+            print('yes111')
+        else:
+            page = 1
+            print('else',page)
+            # page = self.request.GET.get('page')  # 前端发送一个page  去url里面取page的值
+        #
+        print('Aset', self.cookies_number,page)
         try:
             self.contacts = paginator.page(page)  # 如果不是整理
         except PageNotAnInteger:
@@ -147,7 +153,7 @@ class Asset(BaseServiceList):
                 "Salt_run_status": models.Saltrun.status_choirce
             }
         }
-
+        print('总共%s,每页显示%s,当前页是%s,筛选器是%s'%(paginator.count, self.page_number,page,self.contacts))
         return self.response_base,self.contacts,
 
     # @property
