@@ -1,15 +1,16 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import cache_page
 
 
 
-
-
+@cache_page(100)
 def error(request):
     return render(request,'error.html')
 
 @login_required
+@cache_page(60)
 def category(request,category_id):
     if category_id == 'all':
         return render(request,'index.html')

@@ -25,6 +25,7 @@ class SaltApiJSON(View):
         return HttpResponse(json.dumps(hostlist))
 
 class Hsotlist(View):
+
     def get(self, request, *args, **kwargs):
 
         val = get_cookies(request)
