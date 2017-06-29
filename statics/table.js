@@ -55,6 +55,7 @@ function table(requestUrl) {
                 var th = document.createElement('th');
                 th.innerHTML = v.title;
                 $(tr).append(th);
+                // console.log(v);
             }
         });
         $('#salt_tbHead').append(tr)
@@ -76,6 +77,7 @@ function table(requestUrl) {
                         if (v2.substring(0, 2) == '@@') {
                             //temp 就是table_config 配置的字段
                             var temp = v2.substring(2, v2.length);
+
                             if (v1.q == 'source') {
                                 var db_value = getDisplayByid(row.source, temp);
                                 kv[k2] = db_value;
@@ -115,28 +117,35 @@ function table(requestUrl) {
                         // console.log(temp);
 
                         // kv[k2] = db_value_status;
-                        // console.log('kv',kv,'k2',k2)
+                        // console.log('kv',kv,'k2',k2);
 
                         else if (v2[0] == '@') {
                             var temp = v2.substring(1, v2.length);
                             var db_value = row[temp];
-// {#                            console.log(temp);#}
+                            // console.log(temp);
                             kv[k2] = db_value;
-// {#                            console.log(kv)#}
+                            // console.log(kv)
                         }
                         else {
                             kv[k2] = v2
                         }
                     });
-                    var text = v1.type.tpl.format(kv);
 
+
+                    var text = v1.type.tpl.format(kv);
+                    var text1 = $(text).attr('id','test1111');
 
 
                     var td = document.createElement('td');
-
+                    //增加自定义ID，用于编辑
+                    $.each(v1.attr,function (k3,v3) {
+                        // console.log('33',k3,v3);
+                        var td1 = td.setAttribute(k3,v3);
+                    });
+                    // var td1 = td.setAttribute('id','11');
                     // db_value_css.innerHTML="<span class='label label-success'>11</span>";
                     td.innerHTML = text;
-                    $(tr).append(td);
+                    $(tr).append(td)
 
                 }
 

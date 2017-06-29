@@ -147,9 +147,24 @@
         });
 
     });
-    $(function Style_edit(ths) {
-        console.log('1111')
-    })
+    //编辑事件触发
+    function Style_edit(ths) {
+        console.log(ths);
+        var test = 'edit_' + ths;
+{#        var v = $('#' + test).parent().siblings().text();#}
+        var td_list = $('#' + test).parent().prevAll();
+        console.log(td_list);
+        $.each(td_list,function (k,v) {
+            console.log('11',k,v);
+            var $td = $(this);
+{#            console.log('22',$td);#}
+{#            var text = $td.text();#}
+{#            console.log(text);#}
+{#            var value = $td.attr('target');#}
+
+{#            console.log($(value).val(text));#}
+        })
+    }
 
 </script>
 

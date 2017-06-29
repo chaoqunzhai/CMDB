@@ -32,61 +32,56 @@ class Asset(BaseServiceList):
                     'q': 'id',
                     'title': '主机ID',
                     'display': True,
-                    'type': {'tpl': '{db}', 'kwargs': {'db': '@id'}},
-                    'attr': {}
+                    'type': {'tpl': '{db} ', 'kwargs': {'db': '@id'}},
+                    'attr': {'target':'#id','name':'id'}
                 },
                 {
                     'q': 'disk',
                     'title': '磁盘',
                     'display': True,
                     'type': {'tpl': '{db}', 'kwargs': {'db': '@disk'}},
-                    'attr': {}
+                    'attr': {'target':'#disk'}
                 },
                 {
                     'q': 'ip',
                     'title': 'IP地址',
                     'display': True,
                     'type': {'tpl': '{db}', 'kwargs': {'db': '@ip'}},
-                    'attr': {}
+                    'attr': {'target':'#ip'}
                 },
                 {
                     'q': 'kernel',
                     'title': '主机系统',
                     'display': True,
                     'type': {'tpl': '{db}', 'kwargs': {'db': '@kernel'}},
-                    'attr': {}
+                    'attr': {'target':'#kernel'}
                 },
                 {
                     'q': 'role_type__name',
                     'title': '运维人员',
                     'display': True,
                     'type': {'tpl': '{db}', 'kwargs': {'db': '@role_type__name'}},
+                    'attr': {'target': '#role_type__name'}
                 },
                 {
                     'q': 'source',
                     'title': '业务类型',
                     'display': True,
                     'type': {'tpl': '{db}', 'kwargs': {'db': '@@Source_choirce'}},
-                    'attr': {'name': 'source', 'id': '@source', 'origin': '@source',
-                             'edit-enable': 'true',
-                             'edit-type': 'select',
-                             'global-name': 'source'}
+                    'attr': {'target': '#source'}
                 },
                 {
                     'q': 'saltrun__statues',
                     'title': '状态',
                     'display': True,
                     'type': {'tpl': '{db}', 'kwargs': {'db': '@@Salt_run_status'}},
-                    'attr': {'name': 'source', 'id': '@source', 'origin': '@source',
-                             'edit-enable': 'true',
-                             'edit-type': 'select',
-                             'global-name': 'source'}
+                    'attr': {'target': '#saltrun__statues'}
                 },
                 {
                     'q': None,
                     'title': '操作',
                     'display': True,
-                    'type': {'tpl': "<a href='/salt/salt_api_{db}'>查看详情</a> | <span id='edit_{db}' class='label label-primary' onclick='Style_edit();'>编辑</span>  ",
+                    'type': {'tpl': "<a href='/salt/salt_api_{db}'>查看详情</a> | <a id='edit_{db}' class='label label-primary' onclick='Style_edit({db});'>编辑</a>  ",
                              'kwargs': {'db': '@id'}},
                 },
 
