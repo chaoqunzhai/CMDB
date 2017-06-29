@@ -202,6 +202,8 @@ function table(requestUrl) {
 
     $('#do_refresh').click(function () {
         location.reload()
-    })
+    });
+
+
 
 }

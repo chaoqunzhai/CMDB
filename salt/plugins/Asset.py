@@ -86,7 +86,7 @@ class Asset(BaseServiceList):
                     'q': None,
                     'title': '操作',
                     'display': True,
-                    'type': {'tpl': "<a href='/salt/salt_api_{db}'>查看详情</a> | <a href='/salt/salt_api_{db}'>编辑</a>  ",
+                    'type': {'tpl': "<a href='/salt/salt_api_{db}'>查看详情</a> | <span id='edit_{db}' class='label label-primary' onclick='Style_edit();'>编辑</span>  ",
                              'kwargs': {'db': '@id'}},
                 },
 

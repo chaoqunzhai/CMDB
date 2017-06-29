@@ -1,5 +1,5 @@
 from django.shortcuts import render,HttpResponse
-from django.contrib.auth.decorators import login_required
+
 from salt import models
 
 from django.views.generic import View

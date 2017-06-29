@@ -47,7 +47,8 @@
             left: 20px;
             position: relative;
         }
-        #page_select{
+
+        #page_select {
             top: 120px;
             right: 0;
             position: fixed;
@@ -71,7 +72,7 @@
 <script src="/static/table.js"></script>
 <script src="/static/delete.js"></script>
 <script src="/static/js/jquery.cookie.js"></script>
-<script src="/static/js/nb-list.js"></script>
+{#<script src="/static/js/nb-list.js"></script>#}
 {% block js %}{% endblock %}
 <script>
 
@@ -108,9 +109,9 @@
     }
     function post_host() {
         $.ajax({
-            url:'/salt/hostlist?page=1',
-            type:'GET'
-        }
+                url: '/salt/hostlist?page=1',
+                type: 'GET'
+            }
         )
     }
     $(function () {
@@ -122,10 +123,10 @@
                 dataType: 'JSON',
                 traditional: true,
                 success: function (data) {
-                    if(data != 0){
-                        location.href='/salt/salt_api';
+                    if (data != 0) {
+                        location.href = '/salt/salt_api';
                         console.log('salt_form', data)
-                    }else {
+                    } else {
                         console.log('no!!')
                     }
 
@@ -136,16 +137,20 @@
 
     $('#page_select_insert li').each(function (index) {
         var txt = $(this).text();
-{#        console.log('111',this,index);#}
-        $(this).on('click',function () {
-            $.cookie('per_page_count',txt);
+        {#        console.log('111',this,index);#}
+        $(this).on('click', function () {
+            $.cookie('per_page_count', txt);
 
             location.reload();
-            console.log('cookies',txt)
+            console.log('cookies', txt)
 
         });
 
+    });
+    $(function Style_edit(ths) {
+        console.log('1111')
     })
+
 </script>
 
 </body>
