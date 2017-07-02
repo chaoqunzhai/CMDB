@@ -1,5 +1,5 @@
 from django.forms import Form
-from django.forms import widgets
+from django.forms import widgets,ModelChoiceField
 from django.forms import fields
 
 
@@ -26,4 +26,11 @@ class Hostname(Form):
             'min_length':'最小为4个字符',
             'max_length':'最多为24个字符',
         }
+    )
+
+class Saltrun(Form):
+    Saltrun=ModelChoiceField(
+        queryset='',
+        to_field_name='',
+
     )

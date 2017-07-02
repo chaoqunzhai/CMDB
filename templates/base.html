@@ -75,7 +75,12 @@
 {#<script src="/static/js/nb-list.js"></script>#}
 {% block js %}{% endblock %}
 <script>
-
+    $.ajaxSetup({
+        //全局设置ajax请求加csrftoken,这样设置可以发送ajax请求
+        beforeSend: function(xhr,settings){
+            xhr.setRequestHeader('X-CSRFtoken', $.cookie('csrftoken'));
+        }
+    });
     $(function () {
 
         table('/salt/salt_api_json?page={{  articles.number}} ');
@@ -153,17 +158,25 @@
         var test = 'edit_' + ths;
 {#        var v = $('#' + test).parent().siblings().text();#}
         var td_list = $('#' + test).parent().prevAll();
-        console.log(td_list);
-        $.each(td_list,function (k,v) {
-            console.log('11',k,v);
-            var $td = $(this);
-{#            console.log('22',$td);#}
-{#            var text = $td.text();#}
-{#            console.log(text);#}
-{#            var value = $td.attr('target');#}
+{#        console.log(td_list);#}
 
-{#            console.log($(value).val(text));#}
-        })
+        $.each(td_list,function (k,v) {
+{#            console.log(v);#}
+            if($(this).attr('target')) {
+                var td_input = $(this).replaceWith('<td>' + '<input'+' ' +'class='+ "form-control " + ' '+'value =' + $(this).html()  + '>' +  '</input>' + '</td>');
+
+            } else if($(this).attr('select_status')){
+
+{#                var td = $(this).replaceWith('<td value =' + $(this).html()  + '>' +  '</input>' + '</td>');#}
+                console.log('预留做select下拉',$(this).text(),$(this).prop("className"));
+            }else if($(this)[0].className){
+                var td = $(this).html();
+                console.log('1111111111',$(this).attr('form-control'))
+            }
+
+
+        });
+
     }
 
 </script>

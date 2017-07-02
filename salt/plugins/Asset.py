@@ -75,7 +75,7 @@ class Asset(BaseServiceList):
                     'title': '状态',
                     'display': True,
                     'type': {'tpl': '{db}', 'kwargs': {'db': '@@Salt_run_status'}},
-                    'attr': {'target': '#saltrun__statues'}
+                    'attr': {'select_status': '#saltrun__statues'}
                 },
                 {
                     'q': None,
@@ -83,6 +83,7 @@ class Asset(BaseServiceList):
                     'display': True,
                     'type': {'tpl': "<a href='/salt/salt_api_{db}'>查看详情</a> | <a id='edit_{db}' class='label label-primary' onclick='Style_edit({db});'>编辑</a>  ",
                              'kwargs': {'db': '@id'}},
+
                 },
 
             ]

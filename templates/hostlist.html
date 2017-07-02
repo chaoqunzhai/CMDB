@@ -35,7 +35,7 @@
     <h2 class="sub-header">管理列表</h2>
 
     <div style="margin: 0 auto;">
-        <div class="btn-group" role="group" aria-label="...">
+        <div class="btn-group" role="group" aria-label="...">{% csrf_token %}
             <a id="check_all" class="btn btn-success" onclick="checkAll();"><i
                     class="fa fa-floppy-o"></i> 全选</a>
             <a id="check_reverse" class="btn btn-info" onclick="reverAll();"><i
@@ -44,8 +44,7 @@
                     class="fa fa-minus-square-o"></i> 取消</a>
             <a id="check_add" class="btn btn-primary"><i class="fa fa-plus-circle"></i>添加</a>
             <a id="do_delete" class="btn btn-danger "><i class="fa fa-trash"></i> 删除</a>
-            <a id="edit_mode_target" class="btn btn-default no-radius"><i class="fa fa-pencil-square-o"></i>
-                <span>进入编辑模式</span></a>
+
             <a id="do_save" class="btn btn-default no-radius"><i class="fa fa-floppy-o"></i> 保存</a>
             <a id="do_refresh" class="btn btn-default no-radius"><i class="fa fa-refresh"></i> 刷新</a>
             {% if error_msg %}

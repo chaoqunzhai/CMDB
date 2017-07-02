@@ -133,7 +133,7 @@ function table(requestUrl) {
 
 
                     var text = v1.type.tpl.format(kv);
-                    var text1 = $(text).attr('id','test1111');
+
 
 
                     var td = document.createElement('td');

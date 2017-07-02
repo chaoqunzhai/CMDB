@@ -33,16 +33,16 @@ class Hsotlist(View):
         hostname_form=Hostname()
 
         _, contacts = objdata.response
+
         print('[View.Hsotlist.get]   中,每页分%s,Page函数中的值%s,筛选器是%s'%(val,objdata.page_number,contacts))
 
 
-        return render(request, "hostlist.html",{'source_type_dict':obj.sorce_type,'articles':contacts,'hostname_form':hostname_form})
+        return render(request, "hostlist.html", {'source_type_dict':obj.sorce_type, 'articles':contacts, 'hostname_form':hostname_form})
     def post(self,request,*args, **kwargs):
         error_msg=''
         print('test',request.POST.get('ip'),request.POST.get('source'))
         hostname_form = Hostname(request.POST)
         if request.POST.get('ip'):
-
 
             hostname_dict = {'ip':request.POST.get('ip'),'kernel':request.POST.get('kernel'),'source':request.POST.get('source_name')}
             if hostname_form.is_valid():
@@ -52,13 +52,13 @@ class Hsotlist(View):
                     error_msg = '主机已经存在'
                 else:
                     models.Hostname.objects.create(**hostname_dict)
-                return render(request, 'hostlist.html', {'error_msg': error_msg, 'source_type_dict': obj.sorce_type,'hostname_form':hostname_form})
+                return render(request, 'hostlist.html', {'error_msg': error_msg, 'source_type_dict': obj.sorce_type, 'hostname_form':hostname_form})
             else:
                 print('error',hostname_form.errors)
         else:
             error_msg='NOT index IP'
-            return render(request,'hostlist.html',{'error_msg':error_msg,'source_type_dict':obj.sorce_type,'hostname_form':hostname_form})
-        return render(request, "hostlist.html",{'source_type_dict':obj.sorce_type,'hostname_form':hostname_form})
+            return render(request, 'hostlist.html', {'error_msg':error_msg, 'source_type_dict':obj.sorce_type, 'hostname_form':hostname_form})
+        return render(request, "hostlist.html", {'source_type_dict':obj.sorce_type, 'hostname_form':hostname_form})
     def delete(self,request,*args,**kwargs):
         uid = request.body
         print('uid',uid.decode())
@@ -69,35 +69,12 @@ class Hsotlist(View):
 class APItDetailView(View):
     def get(self,request,nid):
         print('APItDetailView',nid)
-        return render(request,'salt/asset_detail.html',{'nid':nid})
+        return render(request, 'salt/asset_detail.html', {'nid':nid})
 
 
 
-class SaltMap(View):
-
-    def get(self,request):
-        hosts = models.Hostname.objects.all()
-        print(hosts)
-        test = '业务类型'
-        return render(request, "salt/salt_map.html",{'test':test})
 
 
 
-class SaltLogin(View):
-    def get(self,request):
 
-        return render(request, "salt/salt_login.html")
 
-class SaltApi(View):
-    def get(self,request,*args,**kwargs):
-        return  render(request,'salt/salt_api.html')
-
-    def post(self,request,*args,**kwargs):
-        Tag=0
-        salt_api_id=request.POST.getlist('salt_api_id')
-        salt_api_name = request.POST.getlist('salt_api_name')
-        salt_api_tage = request.POST.getlist('salt_api_tage')
-        if salt_api_id and salt_api_name and salt_api_tage:
-            Tag=1
-        print('salt_api',salt_api_id,salt_api_name,salt_api_tage)
-        return render(request, 'salt/salt_api.html',{'Tag':Tag})
