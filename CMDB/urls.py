@@ -17,6 +17,8 @@ from django.conf.urls import url,include
 from django.contrib import admin
 from CMDB import views
 
+
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$',views.acc_login,name='login'),
@@ -24,4 +26,5 @@ urlpatterns = [
     url(r'^error$',views.error,name='error'),
     url(r'^category/(\d+|all)/$', views.category, name="category"),
     url(r'^salt/',include('salt.urls')),
+    url(r'^cmdbAdmin/', include("cmdbAdmin.urls")),
 ]

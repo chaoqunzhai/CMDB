@@ -23,7 +23,7 @@ class Hostname(models.Model):
     cpu = models.CharField(max_length=8,null=True,blank=True)
     kernel = models.CharField(max_length=24,null=True,blank=True)
     species_type = models.ForeignKey('Species',verbose_name='业务线经理',null=True,blank=True)
-    role_type = models.ManyToManyField('Userprofile',blank=True,null=True,default=1)
+    role_type = models.ManyToManyField('Userprofile',blank=True)
     source_choirce = (
         (0,'B28'),
         (1,'B2C'),

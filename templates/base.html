@@ -163,8 +163,9 @@
         $.each(td_list,function (k,v) {
 {#            console.log(v);#}
             if($(this).attr('target')) {
-                var td_input = $(this).replaceWith('<td>' + '<input'+' ' +'class='+ "form-control " + ' '+'value =' + $(this).html()  + '>' +  '</input>' + '</td>');
 
+                var td_input = $(this).replaceWith('<td>' + '<input'+' ' +'class='+ "form-control " + ' '+'value =' + $(this).html()  + '>' +  '</input>' + '</td>');
+                console.log($(this))
             } else if($(this).attr('select_status')){
 
 {#                var td = $(this).replaceWith('<td value =' + $(this).html()  + '>' +  '</input>' + '</td>');#}
@@ -173,8 +174,6 @@
                 var td = $(this).html();
                 console.log('1111111111',$(this).attr('form-control'))
             }
-
-
         });
 
     }
