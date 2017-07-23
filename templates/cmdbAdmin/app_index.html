@@ -7,11 +7,11 @@
             <div class="">
                 <h3>{{ app_name }} </h3>
                 <table class="table table-hover">
-                    {% for model_name,val in table_list_dict.items %}
+                    {% for model_name,admin_class in table_list_dict.items %}
                         <tr>
                             <td>
                                 <a href="{{ app_name }}/{{ model_name }}">
-                                    {% get_model_verbose_name val.0 %}
+                                    {% get_model_verbose_name admin_class %}
                                 </a>
                             </td>
                         </tr>
@@ -21,6 +21,9 @@
 
         {% endfor %}
     </div>
+
+{% endblock %}
+{% block js %}
 
 {% endblock %}
 

@@ -3,12 +3,13 @@
 class BaseAdmin(object):
     list_display = ()
     list_filter = ()
+    list_per_page = 5
 
 class Adminsite(object):
     def __init__(self):
         self.registered_admins = { }
 
-    def register(self, model_or_iterable, admin_class=None, **options):
+    def register(self, model_or_iterable, admin_class=BaseAdmin, **options):
             """
             负责把每个App下的表注册self.registered_admins集合里
             model_or_iterable:里面是自定义的admin中的表传入过来的表名
@@ -30,11 +31,13 @@ class Adminsite(object):
             :param options:
             :return:
             """
+
+            admin_class.model = model_or_iterable #把model装到了admin class,以供前端模板调用  , 来解决那个前端不能使用model的原因
             app_label = model_or_iterable._meta.app_label #通过表获取app的名字
 
             if app_label not in self.registered_admins:  #如果不在这个集合内就新建一个app的key
                 self.registered_admins[app_label] = {}
-            self.registered_admins[app_label][model_or_iterable._meta.model_name] = [model_or_iterable,admin_class]
+            self.registered_admins[app_label][model_or_iterable._meta.model_name] = admin_class
 
 
 
