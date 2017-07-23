@@ -4,23 +4,36 @@
 
 {% block cmdAdmin %}
     <h3>{{ app_name }}</h3>
-    {% if admin_class.list_filter %}
 
+
+    <form>
         <div class="row">
-            <form>
-                {% for filter_column in admin_class.list_filter %}
-                    <div class="col-lg-2">
-                        <p>{{ filter_column }}</p>
-                        {% buid_filetr_ele filter_column admin_class filter_conditions %}
-                    </div>
-                {% endfor %}
+            <div class="input-group col-lg-2">
+
+                <input type="search" name="_q" class="form-control" placeholder="Search for...">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">Go!</button>
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            {% for filter_column in admin_class.list_filter %}
+                <div class="col-lg-2">
+                    <p>{{ filter_column }}</p>
+                    {% buid_filetr_ele filter_column admin_class filter_conditions %}
+                </div>
+            {% endfor %}
+            {% if admin_class.list_filter %}
                 <div class="col-lg-2">
                     <button class="btn btn-success" style="margin-top: 30px">过滤</button>
                 </div>
-            </form>
+            {% endif %}
         </div>
+    </form>
 
-    {% endif %}
+
+
+
 
     <table class=" table table-bordered table-hover">
         <thead>
@@ -50,27 +63,28 @@
 
     </table>
     <div id="page_select">
-            <div class="btn-group">
-                <button type="button" class="btn btn-danger">分页数</button>
-                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false">
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" id="page_select_insert" onchange="changePageSize(this)" >
-                    <li value="5"><a href=" ">5</a></li>
-                    <li value="10"><a href=" " >10</a></li>
-                    <li value="20"><a href=" ">20</a></li>
-                    <li value="30"><a href=" ">30</a></li>
-                </ul>
-            </div>
+        <div class="btn-group">
+            <button type="button" class="btn btn-danger">分页数</button>
+            <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" id="page_select_insert" onchange="changePageSize(this)">
+                <li value="5"><a href=" ">5</a></li>
+                <li value="10"><a href=" ">10</a></li>
+                <li value="20"><a href=" ">20</a></li>
+                <li value="30"><a href=" ">30</a></li>
+            </ul>
         </div>
+    </div>
     <nav>
         <nav>
-        {% get_filter_condtions_string filter_conditions as  filter_condtions_string %}
+            {% get_filter_condtions_string filter_conditions as  filter_condtions_string %}
             <ul class="pagination">
                 <li class=""><a href="?_page=1{{ filter_condtions_string }}">首页 </a></li>
                 {% if queyset.has_previous %}
-                    <li class=" "><a href="?_page={{ queyset.previous_page_number }}{{ filter_condtions_string }}" aria-label="Previous"><span
+                    <li class=" "><a href="?_page={{ queyset.previous_page_number }}{{ filter_condtions_string }}"
+                                     aria-label="Previous"><span
                             aria-hidden="true">&laquo;</span></a></li>
                 {% else %}
                     <li class="disabled "><a href="?" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
@@ -78,17 +92,19 @@
                 {% endif %}
                 {% for page in queyset.paginator.page_range %}
                     {% get_abs_value page queyset.number as i  %}<!--i最后获取的是当前页与循环次数查的绝对值-->
-                    {% if i < 3  %}
+                    {% if i < 3 %}
                         {% if queyset.number == page %} {# 如果是当前页#}
-                            <li class="active"><a href="?_page={{ page }}{{  filter_condtions_string}}">{{ page }}<span class="sr-only"></span></a>
+                            <li class="active"><a href="?_page={{ page }}{{ filter_condtions_string }}">{{ page }}<span
+                                    class="sr-only"></span></a>
                             </li>
                         {% else %}
-                            <li class=""><a href="?_page={{ page }}{{  filter_condtions_string}}">{{ page }}<span class="sr-only"></span></a></li>
+                            <li class=""><a href="?_page={{ page }}{{ filter_condtions_string }}">{{ page }}<span
+                                    class="sr-only"></span></a></li>
                         {% endif %}
                     {% endif %}
                 {% endfor %}
                 {% if queyset.next_page_number > 1 %}
-                    <li class=""><a href="?_page={{ queyset.next_page_number }}{{  filter_condtions_string}}"><span
+                    <li class=""><a href="?_page={{ queyset.next_page_number }}{{ filter_condtions_string }}"><span
                             aria-hidden="true">&raquo;</span></a></li>
                 {% else %}
                     <li class="disabled"><a href="?"><span aria-hidden="true">&raquo;</span></a></li>
@@ -101,6 +117,6 @@
         </nav>
     </nav>
     <span style="color: #8c8c8c"> 总计{{ queyset.paginator.count }}条数据,总计{{ queyset.paginator.num_pages }}页</span>
-   
+
 {% endblock %}
 

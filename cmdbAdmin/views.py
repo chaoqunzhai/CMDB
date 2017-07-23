@@ -20,12 +20,28 @@ def get_filter_objs(request,admin_class):
     filter_condtions = {}
     for k,v in request.GET.items():
         print('kv',k,v)
-        if k == '_page':continue
+        '''这里跳过的意思,前端进行分页操作,然后name=参数 传递到这，是不需要去数据库中过滤的
+        _q 是搜索字段,也是不用去这个过滤操作中的，所以跳过。具体search操作在其他函数中
+        '''
+        if k in ['_page','_q']:continue
+
+
         if v and v != '---------':
             filter_condtions[k]=v
     querset = admin_class.model.objects.filter(**filter_condtions)
     print('前端提交过滤',filter_condtions)
     return querset,filter_condtions
+def get_search_objs(request,queyset,admin_class):
+    """
+    1.拿到_q的值
+    2.拼接Q查询条件
+    3.调用filter里面的(Q条件)
+    4.返回结果
+    :param request:
+    :param queyset:
+    :param admin_class:
+    :return:
+    """
 
 def model_table_list(request, app_name, model_name):
     '''
@@ -47,8 +63,12 @@ def model_table_list(request, app_name, model_name):
         if model_name in site.registered_admins[app_name]:
             admin_class = site.registered_admins[app_name][model_name]
             queyset = admin_class.model.objects.all()
-            '''filter_conditions 是前端选择过滤的字段,然后在传递给buid_filetr_ele 去做前端option selected '''
+            '''get_filter_objs数据过滤,把所有参数拼成一个字典,
+            filter_conditions 是前端选择过滤的字段,然后在传递给buid_filetr_ele 去做前端option selected '''
             queyset,filter_conditions = get_filter_objs(request,admin_class)
+            #对已经过滤后的数据,在进行search
+            get_search_objs(request,queyset,admin_class)
+
             print('存在--',queyset)
             paginator = Paginator(queyset, pgae_number)
             page = request.GET.get('_page')
