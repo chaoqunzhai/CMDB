@@ -58,13 +58,30 @@ def  get_abs_value(page,curent_page_number):
 
     return abs(page - curent_page_number)
 @register.simple_tag()
-def get_filter_condtions_string(filter_conditions):
+def get_filter_condtions_string(filter_conditions,q_val):
+
     """增加分页后，点击下一页，还是让前端显示选中的option的selected"""
     condtion_str = ""
     for k,v in filter_conditions.items():
+
         condtion_str +="&%s=%s" %(k,v)
+
     print("condtion_str",condtion_str)
+
+    """拼接search字段,下一页的时候，还是带search的值"""
+    if q_val:
+        condtion_str += "&_q=%s" %q_val
     return condtion_str
+
+
+@register.simple_tag()
+def generate_orderby_icon(new_order_key):
+    if new_order_key.startswith('-'):
+        icon_ele = """<i class="fa fa-angle-up" aria-hidden="true"></i>"""
+    else:
+        icon_ele = """<i class="fa fa-caret-down" aria-hidden="true"></i>"""
+    return mark_safe(icon_ele)
+
 @register.simple_tag()
 def buid_filetr_ele(filter_column,admin_class,filter_conditions):
     '''
@@ -89,7 +106,7 @@ def buid_filetr_ele(filter_column,admin_class,filter_conditions):
 
     select_ele = "<select class='form-control' name=%s>" %filter_column
     print('filter_option',filter_option)
-    if  filter_option:  #字段是否过滤.当用到多个过滤条件的时候
+    if filter_option:  #字段是否过滤.当用到多个过滤条件的时候
         for choices in fields_obj:
             if filter_option == str(choices[0]):
                 selected = "selected"
@@ -98,10 +115,12 @@ def buid_filetr_ele(filter_column,admin_class,filter_conditions):
             option_ele = "<option value=%s %s>%s</option>" %(choices[0],selected,choices[1])
             select_ele += option_ele
     else:
-        for choices in fields_obj:
-            option_ele = "<option value=%s %s></option>" % (choices[0],choices[1])
-            select_ele += option_ele
 
+        for choices in fields_obj:
+            option_ele = "<option value=%s>%s</option>" % (choices[0],choices[1])
+            # option_ele = "<option value=''>---------</option>"
+            select_ele += option_ele
+        print('---------', fields_obj)
     select_ele += "</select>"
     return mark_safe(select_ele)
     # # print('bulid——filter',admin_class.model._meta.get_field(filter_column))

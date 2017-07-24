@@ -4,6 +4,8 @@ class BaseAdmin(object):
     list_display = ()
     list_filter = ()
     list_per_page = 5
+    search_fields = []
+
 
 class Adminsite(object):
     def __init__(self):

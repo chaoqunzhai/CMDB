@@ -3,7 +3,7 @@ from cmdbAdmin import app_config
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from cmdbAdmin.admin_base import site
 from cmdbAdmin.plugins.getcookis import get_cookies
-
+from django.db.models import Q
 
 def app_index(request):
 
@@ -23,18 +23,20 @@ def get_filter_objs(request,admin_class):
         '''这里跳过的意思,前端进行分页操作,然后name=参数 传递到这，是不需要去数据库中过滤的
         _q 是搜索字段,也是不用去这个过滤操作中的，所以跳过。具体search操作在其他函数中
         '''
-        if k in ['_page','_q']:continue
+        if k in ['_page','_q','_o']:continue
 
 
         if v and v != '---------':
             filter_condtions[k]=v
-    querset = admin_class.model.objects.filter(**filter_condtions)
-    print('前端提交过滤',filter_condtions)
+    print('前端提交过滤', filter_condtions)
+    querset = admin_class.model.objects.filter(**filter_condtions).order_by('-id')
+
     return querset,filter_condtions
+
 def get_search_objs(request,queyset,admin_class):
     """
     1.拿到_q的值
-    2.拼接Q查询条件
+    2.拼接Q查询条件      q obj (OR: ('ip', '111'), ('fun', '111'))
     3.调用filter里面的(Q条件)
     4.返回结果
     :param request:
@@ -42,6 +44,54 @@ def get_search_objs(request,queyset,admin_class):
     :param admin_class:
     :return:
     """
+    q_val = request.GET.get('_q')
+
+    if q_val:
+        q_obj = Q()
+        q_obj.connector = "OR"
+        for search_field in admin_class.search_fields:
+            q_obj.children.append(("%s__contains" %search_field,q_val))
+        print('q_obj',q_obj)
+        search_results = queyset.filter(q_obj)
+    else:
+        search_results = queyset
+    return search_results,q_val
+
+def get_order_objs(request,queyset):
+    """
+    排序,
+    1.获取_o的正负值,来确定下次排序是顺序
+    2.调用oder_by(_o的值)
+    3.处理整
+    :param request:
+    :param queyset:
+    :return:
+    """
+    #orderby_key 是拿到前端的字段
+    #orderby_column 对哪个字段进行了排序,只是用来给前端判断是对同一个字段排序
+    #orderby_result 是排序后的数据
+    #new_order_key
+
+    orderby_key =request.GET.get('_o')
+    last_orderby_key = orderby_key
+    if orderby_key:
+        orderby_column = orderby_key.strip('-')
+        orderby_result = queyset.order_by(orderby_key)
+
+
+        #正序，倒叙 选择
+
+        if orderby_key.startswith('-'):
+            new_order_key = orderby_key.strip('-')
+
+        else:
+            new_order_key = "-%s" %orderby_key
+
+        return orderby_result,new_order_key,orderby_column,last_orderby_key
+    else:
+        return queyset,None,None,last_orderby_key
+
+
 
 def model_table_list(request, app_name, model_name):
     '''
@@ -65,9 +115,12 @@ def model_table_list(request, app_name, model_name):
             queyset = admin_class.model.objects.all()
             '''get_filter_objs数据过滤,把所有参数拼成一个字典,
             filter_conditions 是前端选择过滤的字段,然后在传递给buid_filetr_ele 去做前端option selected '''
+            #过滤后的数据
             queyset,filter_conditions = get_filter_objs(request,admin_class)
-            #对已经过滤后的数据,在进行search
-            get_search_objs(request,queyset,admin_class)
+            #对已经过滤后的数据,在进行search,q_val 是让前端可以显示
+            queyset,q_val = get_search_objs(request,queyset,admin_class)
+            #排序
+            queyset, new_order_key, orderby_column,last_orderby_key = get_order_objs(request,queyset)
 
             print('存在--',queyset)
             paginator = Paginator(queyset, pgae_number)
@@ -75,10 +128,10 @@ def model_table_list(request, app_name, model_name):
             try:
                 queyset = paginator.page(page)
             except PageNotAnInteger:
-                # If page is not an integer, deliver first page.
+
                 queyset = paginator.page(1)
             except EmptyPage:
-                # If page is out of range (e.g. 9999), deliver last page of results.
+
                 queyset = paginator.page(paginator.num_pages)
 
             print('总共',paginator.count)
