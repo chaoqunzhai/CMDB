@@ -71,22 +71,21 @@ def get_order_objs(request,queyset):
     #orderby_column 对哪个字段进行了排序,只是用来给前端判断是对同一个字段排序
     #orderby_result 是排序后的数据
     #new_order_key
-
+    #last_orderby_key 就是用来下一页的记住当前的_o=  参数
     orderby_key =request.GET.get('_o')
-    last_orderby_key = orderby_key
+    #设置返回给前端为空,如果是none 会出错
+    last_orderby_key = orderby_key or ''
+
     if orderby_key:
         orderby_column = orderby_key.strip('-')
         orderby_result = queyset.order_by(orderby_key)
 
 
-        #正序，倒叙 选择
-
+        #正序，倒叙
         if orderby_key.startswith('-'):
             new_order_key = orderby_key.strip('-')
-
         else:
             new_order_key = "-%s" %orderby_key
-
         return orderby_result,new_order_key,orderby_column,last_orderby_key
     else:
         return queyset,None,None,last_orderby_key
