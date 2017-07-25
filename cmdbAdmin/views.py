@@ -154,9 +154,9 @@ def table_obj_change(request,app_name,model_name,object_id):
                 form_obj = form(instance=object,data=request.POST)
                 if form_obj.is_valid():
                     form_obj.save()
-                    test1 = "%s/change/" %object_id
-                    print('path',request.path.split('/')[0:-2])
-                    return redirect(request.path)
+                    path = "%s/change/" %object_id
+
+                    return redirect(request.path.replace(path,''))
 
     return render(request,'cmdbAdmin/table_object_model.html',locals())
 
