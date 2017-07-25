@@ -1,10 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from cmdbAdmin import app_config
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from cmdbAdmin.admin_base import site
 from cmdbAdmin.plugins.getcookis import get_cookies
 from django.db.models import Q
-
+from cmdbAdmin import forms
 def app_index(request):
 
     return render(request, 'cmdbAdmin/app_index.html', {'site': site})
@@ -136,5 +136,47 @@ def model_table_list(request, app_name, model_name):
             print('总共',paginator.count)
             return render(request, "cmdbAdmin/model_table_list.html", locals())
 
+def table_obj_change(request,app_name,model_name,object_id):
 
+    if app_name in site.registered_admins:
+        if model_name in site.registered_admins[app_name]:
+            #返回表单都需要这些值
+            admin_class = site.registered_admins[app_name][model_name]
+
+            object = admin_class.model.objects.get(id=object_id)
+            # 生成一个form obj
+            form = forms.create_dynamic_modelform(admin_class.model)
+            if request.method == "GET":
+                #modelform的用法
+                form_obj = form(instance=object)
+
+            elif request.method == "POST":
+                form_obj = form(instance=object,data=request.POST)
+                if form_obj.is_valid():
+                    form_obj.save()
+                    test1 = "%s/change/" %object_id
+                    print('path',request.path.split('/')[0:-2])
+                    return redirect(request.path)
+
+    return render(request,'cmdbAdmin/table_object_model.html',locals())
+
+def table_obj_add(request,app_name,model_name):
+    if app_name in site.registered_admins:
+        if model_name in site.registered_admins[app_name]:
+            # 返回表单都需要这些值
+            admin_class = site.registered_admins[app_name][model_name]
+
+
+            # 生成一个form obj
+            form = forms.create_dynamic_modelform(admin_class.model)
+            if request.method == "GET":
+                # modelform的用法
+                form_obj = form()
+
+            elif request.method == "POST":
+                form_obj = form(data=request.POST)
+                if form_obj.is_valid():
+                    form_obj.save()
+                    return redirect(request.path.rstrip("add/"))
+    return render(request, 'cmdbAdmin/table_object_model.html', locals())
 print("注册的admin list:", site.registered_admins)

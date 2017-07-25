@@ -43,7 +43,8 @@ def build_table_row(row,admin_class):
         else:
             colomn_val =getattr(row,colomn_name)
         if index == 0:
-            td_ele = "<td><a href='#'>{colomn_val}</td>".format(colomn_val=colomn_val)
+            ''' 给前端返回一个带数据库id的 连接，这样可以点击指定id进去'''
+            td_ele = "<td><a href='{obj_id}/change'>{colomn_val}</td>".format(obj_id=row.id,colomn_val=colomn_val)
         else:
             td_ele = "<td name='11'>{colomn_val}</td>".format(colomn_val=colomn_val)
         row_ele +=td_ele

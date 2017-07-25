@@ -16,6 +16,7 @@
                     <button class="btn btn-default" type="submit">Go!</button>
                 </span>
             </div>
+
         </div>
         {% if admin_class.search_fields %}
 
@@ -44,6 +45,9 @@
                     <button class="btn btn-success" style="margin-top: 30px">过滤</button>
                 </div>
             {% endif %}
+            <div id="site_btn" class="col-lg-2">
+                <a href="add/" class="btn btn-info" style="margin-top: 30px"> ADD {% get_model_verbose_name admin_class %}</a>
+            </div>
         </div>
     </form>
 

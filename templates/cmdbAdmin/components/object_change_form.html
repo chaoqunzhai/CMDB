@@ -1,0 +1,27 @@
+ <div class="container">
+        <div class="col-lg-8">
+        <form class="form-horizontal" method="POST">{% csrf_token %}
+            {% for filed in form_obj %}
+            <div class="form-group">
+                <label  class="col-sm-2 control-label">
+                    {% if filed.field.required %}
+                    {{ filed.name }}
+                        {% else %}
+                        <span style="font-weight: normal">{{ filed.name }}</span>
+                    {% endif %}
+                </label>
+                <div class="col-sm-10">
+                    {{ filed }}<span style="color: gray;font-size: 10px">{{ filed.help_text }}</span>
+                    <span style="color: red">{{ filed.errors }}</span>
+                </div>
+            </div>
+            {% endfor %}
+            <div class="form-group">
+                <div class="col-sm-2 col-lg-offset-10">
+                    <input type="submit" class="btn btn-success btn-lg" value="Save">
+                </div>
+            </div>
+            <span style="color: gray;font-size: 15px" >加粗为必填</span>
+        </form>
+        </div>
+    </div>

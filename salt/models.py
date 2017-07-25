@@ -53,7 +53,7 @@ class Species(models.Model):
 
 class Saltrun(models.Model):
     ip = models.ForeignKey('Hostname')
-    fun = models.CharField(max_length=16,verbose_name='SALT模块')
+    fun = models.CharField(max_length=16,verbose_name='SALT模块',help_text='Salt模块')
     fun_args = models.CharField(max_length=32,verbose_name='执行命令')
     salt_callable =  models.TextField(null=True,blank=True)
     job = models.CharField(max_length=64)
